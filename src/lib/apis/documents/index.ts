@@ -163,7 +163,8 @@ export const updateDocByName = async (token: string, name: string, form: DocUpda
 		},
 		body: JSON.stringify({
 			name: form.name,
-			title: form.title
+			title: form.title,
+			folder: form.folder
 		})
 	})
 		.then(async (res) => {
