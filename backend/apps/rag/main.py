@@ -1160,6 +1160,7 @@ def scan_docs_dir(user=Depends(get_admin_user)):
                 tags = extract_folders_after_data_docs(path)
                 filename = path.name
                 file_content_type = mimetypes.guess_type(path)
+                folder = str(path.parent.relative_to(DOCS_DIR))
 
                 f = open(path, "rb")
                 collection_name = calculate_sha256(f)[:63]
