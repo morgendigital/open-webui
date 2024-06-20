@@ -27,6 +27,7 @@ class Document(Model):
     name = CharField(unique=True)
     title = TextField()
     filename = TextField()
+    folder = CharField(default="", null=True)
     content = TextField(null=True)
     user_id = CharField()
     timestamp = BigIntegerField()
@@ -40,6 +41,8 @@ class DocumentModel(BaseModel):
     name: str
     title: str
     filename: str
+    folder: Optional[str] = None
+    folder: Optional[str] = None
     content: Optional[str] = None
     user_id: str
     timestamp: int  # timestamp in epoch
@@ -55,6 +58,7 @@ class DocumentResponse(BaseModel):
     name: str
     title: str
     filename: str
+    folder: Optional[str] = None
     content: Optional[dict] = None
     user_id: str
     timestamp: int  # timestamp in epoch
