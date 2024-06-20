@@ -6,6 +6,7 @@ export const createNewDoc = async (
 	filename: string,
 	name: string,
 	title: string,
+	folder: string,
 	content: object | null = null
 ) => {
 	let error = null;
@@ -22,7 +23,40 @@ export const createNewDoc = async (
 			filename: filename,
 			name: name,
 			title: title,
-			...(content ? { content: JSON.stringify(content) } : {})
+			...(content ? { content: JSON.stringify(content) } : {}),
+			folder: folder
+		})
+	})
+		.then(async (res) => {
+			if (!res.ok) throw await res.json();
+			return res.json();
+		})
+		.catch((err) => {
+			error = err.detail;
+			console.log(err);
+			return null;
+		});
+
+	if (error) {
+		throw error;
+	}
+
+	return res;
+};
+
+export const createFolder = async (token: string, collection_name: string, folder: string) => {
+	let error = null;
+
+	const res = await fetch(`${WEBUI_API_BASE_URL}/documents/folder/create`, {
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			authorization: `Bearer ${token}`
+		},
+		body: JSON.stringify({
+			collection_name: collection_name,
+			folder: folder
 		})
 	})
 		.then(async (res) => {
@@ -111,6 +145,7 @@ export const getDocByName = async (token: string, name: string) => {
 type DocUpdateForm = {
 	name: string;
 	title: string;
+	folder: string;
 };
 
 export const updateDocByName = async (token: string, name: string, form: DocUpdateForm) => {
