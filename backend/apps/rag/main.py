@@ -1065,6 +1065,7 @@ def get_loader(filename: str, file_content_type: str, file_path: str):
 @app.post("/doc")
 def store_doc(
     collection_name: Optional[str] = Form(None),
+    folder: Optional[str] = Form(None),
     file: UploadFile = File(...),
     user=Depends(get_current_user),
 ):
@@ -1121,6 +1122,7 @@ def store_doc(
 
 class TextRAGForm(BaseModel):
     name: str
+    folder: Optional[str] = None
     content: str
     collection_name: Optional[str] = None
 
@@ -1137,7 +1139,7 @@ def store_text(
 
     result = store_text_in_vector_db(
         form_data.content,
-        metadata={"name": form_data.name, "created_by": user.id},
+        metadata={"name": form_data.name, "created_by": user.id, "folder": form_data.folder},
         collection_name=collection_name,
     )
 
@@ -1184,6 +1186,7 @@ def scan_docs_dir(user=Depends(get_admin_user)):
                                         "title": filename,
                                         "collection_name": collection_name,
                                         "filename": filename,
+                                        "folder": folder,
                                         "content": (
                                             json.dumps(
                                                 {
